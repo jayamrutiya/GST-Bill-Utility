@@ -241,7 +241,7 @@
                                         <%}%>
                                     </select>
                                     <%}%>
-                                    <input type="text" value="" class="temppro1" name="productname">
+                                    <input type="hidden" value="" class="temppro1" name="productname">
                                 </td>
                         
                         <td><input type="number" name="producthsn" value="" id="producthsn1" class="form-control input-sm producthsn" data-srno="1"></td>
@@ -411,7 +411,7 @@
                 html_code += '<tr id="rowid'+count+'">';
                 html_code += '<td><span id="srno">'+count+'</span></td>';
 
-                html_code += '<td><%if(productinfo.length > 0){%><select class="form-control input-sm productname" data-subcatid="'+count+'" id="productname'+count+'" name="productid"><option value="0">--Select--</option><%for(var i=0; i<productinfo.length; i++){%><option id="<%= productinfo[i].productid %>" value="<%= productinfo[i].productid %>"><%= productinfo[i].productsize %><%= productinfo[i].productuom %> <%= productinfo[i].productname %></option><%}%></select><%}%><input type="text" value="" class="temppro'+count+'" name="productname"></td>';
+                html_code += '<td><%if(productinfo.length > 0){%><select class="form-control input-sm productname" data-subcatid="'+count+'" id="productname'+count+'" name="productid"><option value="0">--Select--</option><%for(var i=0; i<productinfo.length; i++){%><option id="<%= productinfo[i].productid %>" value="<%= productinfo[i].productid %>"><%= productinfo[i].productsize %><%= productinfo[i].productuom %> <%= productinfo[i].productname %></option><%}%></select><%}%><input type="hidden" value="" class="temppro'+count+'" name="productname"></td>';
             
                 html_code += '<td><input type="number" name="producthsn" value="" id="producthsn'+count+'" class="form-control input-sm producthsn" data-srno="'+count+'"></td>';
                 html_code += '<td><input type="text" name="productrate" value="" id="productrate'+count+'" class="form-control input-sm productrate" data-srno="'+count+'"></td>';
