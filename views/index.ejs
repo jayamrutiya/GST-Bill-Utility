@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./includes/toplinks.ejs') %>
+  </head>
+  <body id="page-top">
+    <!--page wrapper-->
+    <div id="wrapper">
+      <!--Sidebar-->
+      <%- include('./includes/indexsidebar.ejs') %>
+      <!--End of Sidebar-->
+      <!--Content Wrapper-->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!--main content-->
+        <div id="content">
+          <!--navbar-->
+          <%- include('./includes/navbar.ejs') %>
+          <!--end of navbar-->
+          <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <div class="row">
+            <%if(companyinfo.length > 0){%>
+            <%for(var i=0; i<companyinfo.length; i++){%>
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><%= companyinfo[i].companyname %></div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                    </div>
+                    <div class="col-auto">
+                      <a href="/sendid/<%= companyinfo[i].companyid %>" class="btn btn-primary btn-circle btn-lg sendcompanyid">
+                        <!-- <input type="hidden" value="<%= companyinfo[i].companyid %>" name="companyid" id="sendcompanyid"> -->
+                        <i class="fas fa-arrow-right"></i>
+                      </a>
+                      <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%}%>
+            <%}else{%>
+              <h1>No Company Found</h1>
+            <%}%>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+        </div>
+        <!--end of main content-->
+        <!--Footer-->
+        <%- include('./includes/footer.ejs') %>
+        <!--End of Footer-->
+      </div>
+      <!--End of Content Wrapper-->
+    </div>
+    <!--end of page wrapper-->
+    <!-- <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p> -->
+    <%- include('./includes/bottomlinks.ejs') %>
+    <!-- <script>
+      $(document).ready(function(){
+        $('.card').on('click', '.sendcompanyid', function(){
+          var companyid = $(this).data('companyid');
+          console.log(companyid)
+          $.ajax({
+            url: 'sendid/' + companyid,
+            type: 'POST',
+            dataType: 'json'
+          });
+        });
+      });
+    </script> -->
+  </body>
+</html>

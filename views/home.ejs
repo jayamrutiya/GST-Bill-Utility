@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./includes/toplinks.ejs') %>
+  </head>
+  <body id="page-top">
+    <!--page wrapper-->
+    <div id="wrapper">
+      <!--Sidebar-->
+      <%- include('./includes/sidebar.ejs') %>
+      <!--End of Sidebar-->
+      <!--Content Wrapper-->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!--main content-->
+        <div id="content">
+          <!--navbar-->
+          
+                  <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                      <i class="fa fa-bars"></i>
+                    </button>
+                    <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown no-arrow d-sm-none">
+                      </li>
+                      <div class="topbar-divider d-none d-sm-block"></div>
+                      <li class="nav-item dropdown no-arrow">
+                        <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%= companyinfo %></span>
+                          <!-- <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"> -->
+                        </div>
+                      </li>
+                    </ul>
+                  </nav>
+          <!--end of navbar-->
+          <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+
+        </div>
+        <!-- /.container-fluid -->
+        </div>
+        <!--end of main content-->
+        <!--Footer-->
+        <%- include('./includes/footer.ejs') %>
+        <!--End of Footer-->
+      </div>
+      <!--End of Content Wrapper-->
+    </div>
+    <!--end of page wrapper-->
+    <%- include('./includes/bottomlinks.ejs') %>
+  </body>
+</html>

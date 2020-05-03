@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./includes/toplinks.ejs') %>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+  </head>
+  <body id="page-top">
+    <!--page wrapper-->
+    <div id="wrapper">
+      <!--Sidebar-->
+      <%- include('./includes/sidebar.ejs') %>
+      <!--End of Sidebar-->
+      <!--Content Wrapper-->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!--main content-->
+        <div id="content">
+          <!--navbar-->
+          <%- include('./includes/navbar.ejs') %>
+          <!--end of navbar-->
+
+          <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Customer Information</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+          </div>
+          <div class="row pb-3">
+            <button id="addcustomer" class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">ADD</button>
+          </div>
+          <div class="row">
+            <div class="table-responsive">
+              <table id="mytable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                  <th>Customer Name</th>
+                  <th>Contact Person Name</th>
+                  <th>Customer State</th>
+                  <th>Customer GSTIN</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <%if(customerinfo.length > 0){%>
+                <%customerinfo.forEach(function(row){%>
+                  <tr>
+                    <td><%= row.customername %></td>
+                    <td><%= row.contactpersonname %></td>
+                    <td><%= row.customerstate %></td>
+                    <td><%= row.customergstinno %></td>
+                    <td>
+                      <a href="javascript:void(0);" class="btn btn-sm btn-info edit" 
+                      data-customerid="<%= row.customerid %>" 
+                      data-customername="<%= row.customername %>" 
+                      data-contactpersonname="<%= row.contactpersonname %>" 
+                      data-customeraddress="<%= row.customeraddress %>" 
+                      data-customerphonenumber="<%= row.customerphonenumber %>" 
+                      data-customeremailid="<%= row.customeremailid %>" 
+                      data-customerpincode="<%= row.customerpincode %>" 
+                      data-customerstate="<%= row.customerstate %>" 
+                      data-customerstatecode="<%= row.customerstatecode %>" 
+                      data-customergstinno="<%= row.customergstinno %>">Edit</a>
+                      <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-customerid="<%= row.customerid %>">Delete</a>
+                    </td>
+                  </tr>
+                <%})%>
+                <%}%>
+              </table>
+            </div>
+          </div>
+          <!-- <div class="row"> -->
+            <!-- <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+                </div>
+                <div class="card-body">
+                <div class="row pb-2">
+                    <div class="col">
+                        <label>Name:</label>
+                        <input class="form-control" type="text" name="name" placeholder="Customer Name" required>
+                    </div>
+                    <div class="col">
+                        <label>Contact Person Name:</label>
+                        <input class="form-control" type="text" name="contactpersonname" placeholder="Contact Person Name" required>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                    <label>Address:</label>
+                    <textarea name="address" class="form-control" placeholder="Customer Address" required></textarea>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                        <label>Phone Number:</label>
+                        <input type="number" class="form-control" placeholder="Customer Phone Number" required>
+                    </div>
+                    <div class="col">
+                        <label>Email:</label>
+                        <input type="email" class="form-control" placeholder="Customer Email ID" required>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                        <label>Pincode:</label>
+                        <input type="number" class="form-control" placeholder="Enter Pincode" required>
+                    </div>
+                    <div class="col">
+                        <label>State:</label>
+                        <input type="text" class="form-control" placeholder="Enter State" required>
+                    </div>
+                    <div class="col">
+                        <label>State Code:</label>
+                        <input type="number" class="form-control" placeholder="Enter State Code" required>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                        <label>GSTIN No.:</label>
+                        <input type="text" class="form-control" placeholder="Enter GSTIN Number" required>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                        <button type="submit" class="btn bg-primary form-control">ADD</button>
+                    </div>
+                </div>
+                </div>
+              </div> -->
+          <!-- </div> -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+        </div>
+        <!--end of main content-->
+
+        <!-- Modal Add Customer-->
+      <form action="/customeradd" method="post">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Add New Customer</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+              <div class="row pb-2">
+                <div class="col">
+                    <label>Name:</label>
+                    <input class="form-control" type="text" name="customername" placeholder="Customer Name" required>
+                </div>
+                <div class="col">
+                    <label>Contact Person Name:</label>
+                    <input class="form-control" type="text" name="contactpersonname" placeholder="Contact Person Name" required>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                <label>Address:</label>
+                <textarea name="customeraddress" class="form-control" placeholder="Customer Address" required></textarea>
+                </div>
+            </div>
+              <div class="row pb-2">
+                <div class="col">
+                    <label>Phone Number:</label>
+                    <input type="number" class="form-control" name="customerphonenumber" placeholder="Customer Phone Number" required>
+                </div>
+                <div class="col">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" name="customeremailid" placeholder="Customer Email ID" required>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>Pincode:</label>
+                    <input type="number" class="form-control" name="customerpincode" placeholder="Enter Pincode" required>
+                </div>
+                <!-- <div class="col">
+                    <label>State:</label>
+                    <select class="stateforfind">
+                      <option value="gujarat">Gujarat</option>
+                      <option value="goa">Goa</option>
+                      <option value="keral">Keral</option>
+                    </select>
+                    <input type="text" class="form-control" name="customerstate" placeholder="Enter State" required>
+                </div> -->
+            </div>
+            <div class="row pb-2">
+              <div class="col">
+                <label>GSTIN No.:</label>
+                <input type="text" id="gstinno" class="form-control" name="customergstinno" placeholder="Enter GSTIN Number" required>
+              </div>
+            </div>
+            <div class="row pb-2">
+              <div class="col">
+                <label>State:</label>
+                    <!-- <select class="stateforfind">
+                      <option value="gujarat">Gujarat</option>
+                      <option value="goa">Goa</option>
+                      <option value="keral">Keral</option>
+                    </select> -->
+                    <input type="text" id="getstate" class="form-control" name="customerstate" placeholder="Enter State" required>
+              </div>
+              <div class="col">
+                <label>State Code:</label>
+                <input type="number" id="getstatecode" class="form-control" name="customerstatecode" placeholder="Enter State Code" required>
+              </div>
+
+            </div>
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+        <%if(duplicatecustomername != ''){%>
+          <script>
+            window.alert("<%= duplicatecustomername %>");
+          </script>
+        <%}%>
+        <%if(duplicatecustomergstinno != ''){%>
+          <script>
+            window.alert("<%= duplicatecustomergstinno %>");
+          </script>
+        <%}%>
+     </form>
+     <!--End of Modal Add Customer-->
+
+     <!-- Modal Update Product-->
+   <form action="/customeredit" method="post">
+    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
+          <div class="row pb-2">
+            <div class="col">
+                <label>Name:</label>
+                <input class="form-control customername" type="text" name="customername" placeholder="Customer Name" required>
+            </div>
+            <div class="col">
+                <label>Contact Person Name:</label>
+                <input class="form-control contactpersonname" type="text" name="contactpersonname" placeholder="Contact Person Name" required>
+            </div>
+        </div>
+        <div class="row pb-2">
+            <div class="col">
+            <label>Address:</label>
+            <textarea name="customeraddress" class="form-control customeraddress" placeholder="Customer Address" required></textarea>
+            </div>
+        </div>
+        <div class="row pb-2">
+            <div class="col">
+                <label>Phone Number:</label>
+                <input type="number" class="form-control customerphonenumber" name="customerphonenumber" placeholder="Customer Phone Number" required>
+            </div>
+            <div class="col">
+                <label>Email:</label>
+                <input type="email" class="form-control customeremailid" name="customeremailid" placeholder="Customer Email ID" required>
+            </div>
+        </div>
+        <div class="row pb-2">
+            <div class="col">
+                <label>Pincode:</label>
+                <input type="number" class="form-control customerpincode" name="customerpincode" placeholder="Enter Pincode" required>
+            </div>
+            <div class="col">
+                <label>State:</label>
+                <input type="text" class="form-control customerstate" name="customerstate" placeholder="Enter State" required>
+            </div>
+            <div class="col">
+                <label>State Code:</label>
+                <input type="number" class="form-control customerstatecode" name="customerstatecode" placeholder="Enter State Code" required>
+            </div>
+        </div>
+        <div class="row pb-2">
+            <div class="col">
+                <label>GSTIN No.:</label>
+                <input type="text" class="form-control customergstinno" name="customergstinno" placeholder="Enter GSTIN Number" required>
+            </div>
+        </div>
+           <!-- <div class="form-group">
+               <input type="text" name="product_name" class="form-control product_name" placeholder="Product Name" required>
+           </div>
+
+           <div class="form-group">
+               <input type="text" name="product_price" class="form-control price" placeholder="Price" required>
+           </div> -->
+         </div>
+         <div class="modal-footer">
+           <input type="hidden" name="customerid" class="customerid">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="submit" class="btn btn-primary">Update</button>
+         </div>
+       </div>
+     </div>
+    </div>
+</form>
+
+<!-- Modal Delete Product-->
+<form id="add-row-form" action="/customerdelete" method="post">
+  <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="myModalLabel">Delete Customer</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+              <strong>Are you sure to delete this data?</strong>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="customerid" class="form-control customerid" required>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Delete</button>
+            </div>
+             </div>
+     </div>
+  </div>
+</form>
+
+        <!--Footer-->
+        <%- include('./includes/footer.ejs') %>
+        <!--End of Footer-->
+      </div>
+      <!--End of Content Wrapper-->
+    </div>
+    <!--end of page wrapper-->
+    <!-- <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p> -->
+    <%- include('./includes/bottomlinks.ejs') %>
+    <script>
+      $(document).ready(function(){
+        //add DataTables
+        $('#mytable').DataTable();
+        //showing data to add modal
+        $('#gstinno').keyup(function(){
+          $(this).val($(this).val().toUpperCase());
+        });
+        $('#gstinno').on('change', function(){
+          var forstate = $(this).val().substr(0, 2);
+          console.log(forstate);
+          $.ajax({
+            url: 'serchforstate/' + forstate,
+            type: 'POST',
+            dataType: 'json',
+            success: (data) => {
+              $('#getstate').val(data[0].state);
+              $('#getstatecode').val(data[0].statecode);
+            }
+          });
+        });
+            //showing data to edit modal      
+      $('#mytable').on('click','.edit',function(){
+        var customerid = $(this).data('customerid');
+        var customername = $(this).data('customername');
+        var contactpersonname = $(this).data('contactpersonname');
+        var customeraddress = $(this).data('customeraddress');
+        var customerphonenumber = $(this).data('customerphonenumber');
+        var customeremailid = $(this).data('customeremailid');
+        var customerpincode = $(this).data('customerpincode');
+        var customerstate = $(this).data('customerstate');
+        var customerstatecode = $(this).data('customerstatecode');
+        var customergstinno = $(this).data('customergstinno');
+        $('#EditModal').modal('show');
+        $('.customername').val(customername);
+        $('.contactpersonname').val(contactpersonname);
+        $('.customeraddress').val(customeraddress);
+        $('.customerphonenumber').val(customerphonenumber);
+        $('.customeremailid').val(customeremailid);
+        $('.customerpincode').val(customerpincode);
+        $('.customerstate').val(customerstate);
+        $('.customerstatecode').val(customerstatecode);
+        $('.customergstinno').val(customergstinno);
+        $('.customerid').val(customerid);
+      })
+            //showing delete record modal
+            $('#mytable').on('click','.delete',function(){
+        var customerid = $(this).data('customerid');
+        $('#DeleteModal').modal('show');
+        $('.customerid').val(customerid);
+      })
+ 
+    });
+    </script>
+  </body>
+</html>

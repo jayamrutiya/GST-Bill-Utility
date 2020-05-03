@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./includes/toplinks.ejs') %>
+  </head>
+  <body id="page-top">
+    <!--page wrapper-->
+    <div id="wrapper">
+      <!--Sidebar-->
+      <%- include('./includes/sidebar.ejs') %>
+      <!--End of Sidebar-->
+      <!--Content Wrapper-->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!--main content-->
+        <div id="content">
+          <!--navbar-->
+          
+                  <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                      <i class="fa fa-bars"></i>
+                    </button>
+                    <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown no-arrow d-sm-none">
+                      </li>
+                      <div class="topbar-divider d-none d-sm-block"></div>
+                      <li class="nav-item dropdown no-arrow">
+                        <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%= companyinfo[0].companyname %></span>
+                          <!-- <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"> -->
+                        </div>
+                      </li>
+                    </ul>
+                  </nav>
+          <!--end of navbar-->
+          <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+    <!-- MODAL TRIGGER -->
+    <button id="modaladd" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdd">ADD Invoice</button>
+    <div class="row pt-3">
+    <div class="table-responsive">
+        <table id="mytable" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+          <tr>
+            <th>No</th>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Total Amount</th>
+            <th></th>
+          </tr>
+          </thead>
+          <%if(invoiceinfo.length > 0){%>
+          <%invoiceinfo.forEach(function(row){%>
+            <tr>
+              <td><%= row.invoiceno %></td>
+              <td><%= row.customername%></td>
+              <td><%= row.invoicedate %></td>
+              <td><%= row.invoicetotalamount %></td>
+              <td>
+                <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-invoicedetailid="<%= row.invoicedetailid %>" data-customerid="<%= row.customerid %>">Edit</a>
+                <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-invoicedetailid="<%= row.invoicedetailid %>">Delete</a>
+              </td>
+            </tr>
+          <%})%>
+          <%}%>
+        </table>
+      </div>
+    </div>
+    <!-- MODAL -->
+    <div class="modal" id="myModalAdd">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal Title</h5>
+            <button class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+
+            <form method="POST" id="invoiceform">
+                <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+                    <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+                      General Details <!--Padding is optional-->
+                    </span>
+                </div>
+                  <br>
+        
+                <div class="row">
+                    <div class="col">
+                        <label>Invoice Number</label>
+                        <input type="number" name="invoiceno" class="form-control" value="<%= invoiceno %>">
+                    </div>
+                    <div class="col">
+                        <label>Invoice Date</label>
+                        <input type="text" name="invoicedate" class="form-control" id="invoicedate" value="">
+                    </div>
+                </div>
+        
+                <br>
+                <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+                    <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+                      Company Information <!--Padding is optional-->
+                    </span>
+                </div>
+                <br>
+        
+                <%if(companyinfo.length > 0){%>
+                    <div class="row pb-2">
+                        <div class="col">
+                            <label>Name</label>
+                            <input type="text" name="companyname" class="form-control" readonly value="<%= companyinfo[0].companyname %>">
+                        </div>
+                        <div class="col">
+                            <label>GSTIN</label>
+                            <input type="text" name="companygstinno" class="form-control" readonly value="<%= companyinfo[0].companygstinno %>">
+                        </div>
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col">
+                            <label>Address</label>
+                            <textarea name="companyaddress" value="<%= companyinfo[0].companyaddress %>" class="form-control" readonly><%= companyinfo[0].companyaddress %></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Mobile No</label>
+                            <input type="number" name="companymobileno" class="form-control" value="<%= companyinfo[0].companymobileno %>" readonly>
+                        </div>
+                        <div class="col">
+                            <label>Email ID</label>
+                            <input type="email" name="companyemailid" class="form-control" value="<%= companyinfo[0].companyemailid %>" readonly>
+                        </div>
+                    </div>
+                <%}%>
+        
+                <br>
+                <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+                    <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+                      Customer Information <!--Padding is optional-->
+                    </span>
+                </div>
+                <br>
+        
+                
+                    <div class="row pb-2">
+                        <div class="col-6">
+                            <label>Name</label>
+                            <%if(customerinfo.length > 0){%>
+                                
+                                <select id="asd" class="form-control asd" name="customerid">
+                                    <option value="0">--Select--</option>
+                                    <%for(var i=0; i<customerinfo.length; i++){%>
+                                        <option id="<%= customerinfo[i].customerid %>" value="<%= customerinfo[i].customerid %>"><%= customerinfo[i].customername %></option>
+                                    <%}%>
+                                </select>
+                            <%}%>
+                            <input type="hidden" name="customername" class="tempcust" value="">
+                        </div>
+                        <div class="col-6">
+                            <label>Contact Person Name</label>
+                            <input type="text" name="contactpersonname" value="" id="contactpersonname" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col">
+                            <label>Address</label>
+                            <textarea class="form-control" id="customeraddress" value="" name="customeraddress" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col">
+                            <label>Mobile No</label>
+                            <input type="number" name="customerphonenumber" value="" id="customerphonenumber" class="form-control" readonly>
+                        </div>
+                        <div class="col">
+                            <label>Email ID</label>
+                            <input type="email" name="customeremailid" id="customeremailid" value="" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col">
+                            <label>State</label>
+                            <input type="text" name="customerstate" id="customerstate" value="" class="form-control" readonly>
+                        </div>
+                        <div class="col">
+                            <label>State Code</label>
+                            <input type="number" name="customerstatecode" id="customerstatecode" value="" class="form-control" readonly>
+                        </div>
+                        <div class="col">
+                            <label>Pincode</label>
+                            <input type="number" name="customerpincode" id="customerpincode" value="" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col">
+                            <label>GSTIN</label>
+                            <input type="text" name="customergstinno" id="customergstinno" value="" class="form-control" readonly>
+                        </div>
+                    </div> 
+                    
+                    <br>
+                <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+                    <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+                      Product Information <!--Padding is optional-->
+                    </span>
+                </div>
+                <br>
+        
+                <table id="invoicetable" class="table table-bordered">
+                    <tr>
+                        <th width="2%">Sr No.</th>
+                        <th>Product Name</th>
+                        <th width="10%">HSN Code</th>
+                        <th width="10%">Rate</th>
+                        <th width="10%">Qty</th>
+                        <th width="10%">Discount(%)</th>
+                        <th width="10%">Actual Amount</th>
+                        <th colspan="2" width="15%">Tax & Amount</th>
+                        <th rowspan="2" width="10%">Net Amount</th>
+                        <th rowspan="2" width="3%"><button type="button" name="addrow" id="addrow" class="btn btn-success btn-xs">+</button></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Tax(%)</th>
+                        <th>Amount(Rs.)</th>
+                    </tr>
+                    <tr>
+                        <td><span id="srno">1</span></td>
+                        
+                                <td>
+                                    <%if(productinfo.length > 0){%>
+                                    <select class="form-control input-sm productname" data-subcatid="1" id="productname1" name="productid">
+                                        <option value="0">--Select--</option>
+                                        <%for(var i=0; i<productinfo.length; i++){%>
+                                        <option id="<%= productinfo[i].productid %>" value="<%= productinfo[i].productid %>"><%= productinfo[i].productsize %><%= productinfo[i].productuom %> <%= productinfo[i].productname %></option>
+                                        <%}%>
+                                    </select>
+                                    <%}%>
+                                    <input type="text" value="" class="temppro1" name="productname">
+                                </td>
+                        
+                        <td><input type="number" name="producthsn" value="" id="producthsn1" class="form-control input-sm producthsn" data-srno="1"></td>
+                        <td><input type="text" name="productrate" value="" id="productrate1" class="form-control input-sm productrate" data-srno="1"></td>
+                        <td><input type="text" name="productqty" value="" id="productqty1" class="form-control input-sm productqty" data-srno="1"></td>
+                        <td><input type="text" name="productdiscount" value="" id="productdiscount1" class="form-control input-sm productdiscount" data-srno="1"></td>
+                        <td><input type="text" name="productactualamount" value="" id="productactualamount1" class="form-control input-sm productactualamount" data-srno="1"></td>
+                        <td><input type="text" name="producttax" value="" id="producttax1" class="form-control input-sm producttax" data-srno="1"></td>
+                        <td><input type="text" name="producttaxamount" value="" id="productamount1" class="form-control input-sm productamount" data-srno="1"></td>
+                        <td><input type="text" name="productnetamount" value="" id="productnetamount1" class="form-control input-sm productnetamount" data-srno="1"></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <td align="right" colspan="7"><b>Total Amount</b></td>
+                        <td align="center" colspan="3"><b><input type="text" id="invoicetotalamount" name="invoicetotalamount" value=""></span></b></td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="10"><input type="submit" name="createinvoice" id="createinvoice" class="btn btn-info" value="Create"><input type="hidden" name="totalproduct" id="totalproduct" value="1"></td>
+                    </tr>
+                </table>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--./MODAL-->
+
+    <!--Edit Modal-->
+    <div class="modal" id="myModalEdit">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal Title</h5>
+              <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+  
+                <strong>Are you sure to edit this data?</strong>
+  
+            </div>
+            <div class="modal-footer">
+                <form action="/editinvoice" method="POST">
+                    <input type="hidden" name="hdcustomerid" value="" class="hdcustomerid">
+                    <input type="hidden" name="hdinvoicedetailid" value="" class="hdinvoicedetailid">
+                    <button type="submit" class="btn btn-success">Edit</button>
+                </form>
+              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--/Edit Modal-->
+
+    <!--DELETE Modal-->
+    <div class="modal" id="myModalDelete">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal Title</h5>
+              <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+  
+                <strong>Are you sure to delete this data?</strong>
+  
+            </div>
+            <div class="modal-footer">
+                <form action="/deleteinvoice" method="POST">
+                    <input type="hidden" name="hdcustomerid" value="" class="hdcustomerid">
+                    <input type="hidden" name="hdinvoicedetailid" value="" class="hdinvoicedetailid">
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </form>
+              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--/DELETE Modal-->
+
+        </div>
+        <!-- /.container-fluid -->
+        </div>
+        <!--end of main content-->
+        <!--Footer-->
+        <%- include('./includes/footer.ejs') %>
+        <!--End of Footer-->
+      </div>
+      <!--End of Content Wrapper-->
+    </div>
+    <!--end of page wrapper-->
+    <%- include('./includes/bottomlinks.ejs') %>
+
+    <script>
+        $(document).ready(function(){
+            //add DataTables
+        $('#mytable').DataTable();
+
+        $(document).on('click', '#modaladd', function(){
+
+            var dd = new Date().getDate();
+            //console.log(dd)
+            var mm = new Date().getMonth() + 1;
+            //console.log(mm)
+            if (dd < 10){ 
+                dd = '0' + dd; 
+            } 
+            if (mm < 10) { 
+                mm = '0' + mm; 
+            } 
+            var yyyy = new Date().getFullYear();
+            //console.log(yyyy)
+            var today = dd + '-' + mm + '-' + yyyy;
+            //console.log(today)
+            $('#invoicedate').val(today);
+            // $('#cname').on('input', function(){
+            //     var opt = $('option[value="'+$(this).val()+'"]');
+            //     alert(opt.length ? opt.attr('id') : 'No Option');
+            // });
+            var co = $('#totalproduct').val();
+            for(let a=1; a<=co; a++){
+                var subcatid = $('#productname'+a).data('subcatid');
+                $('#productname'+subcatid).val($('.proid'+subcatid).val()); 
+                $('.temppro'+subcatid).val($('#productname'+subcatid).children(':selected').html());
+            }
+            $('.tempcust').val($('#asd').children(':selected').html());
+
+            $('#asd').change(function(){
+                var id = $(this).children(":selected").attr("id");
+                $('.tempcust').val($('#asd').children(':selected').html());
+                //console.log(id);
+                $.ajax({
+                    url: 'serchfordata/' + id,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: (data) => {
+                        //console.log(data)
+                        $('#contactpersonname').val(data[0].contactpersonname);
+                        $('#customeraddress').val(data[0].customeraddress);
+                        $('#customerphonenumber').val(data[0].customerphonenumber);
+                        $('#customeremailid').val(data[0].customeremailid);
+                        $('#customerstate').val(data[0].customerstate);
+                        $('#customerstatecode').val(data[0].customerstatecode);
+                        $('#customerpincode').val(data[0].customerpincode);
+                        $('#customergstinno').val(data[0].customergstinno);
+                    }
+                });
+            });
+            // $("input[name='cname']").on('input', function(e){
+            //     var selectcustomername = $(this).val();
+            //     console.log(selectcustomername)
+
+                
+            //});
+
+            var invoicetotalamount = $('#invoicetotalamount').val();
+            var count = 1;
+            $(document).on('click', '#addrow', function(){
+                count++;
+                $('#totalproduct').val(count);
+                var html_code = '';
+                html_code += '<tr id="rowid'+count+'">';
+                html_code += '<td><span id="srno">'+count+'</span></td>';
+
+                html_code += '<td><%if(productinfo.length > 0){%><select class="form-control input-sm productname" data-subcatid="'+count+'" id="productname'+count+'" name="productid"><option value="0">--Select--</option><%for(var i=0; i<productinfo.length; i++){%><option id="<%= productinfo[i].productid %>" value="<%= productinfo[i].productid %>"><%= productinfo[i].productsize %><%= productinfo[i].productuom %> <%= productinfo[i].productname %></option><%}%></select><%}%><input type="text" value="" class="temppro'+count+'" name="productname"></td>';
+            
+                html_code += '<td><input type="number" name="producthsn" value="" id="producthsn'+count+'" class="form-control input-sm producthsn" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productrate" value="" id="productrate'+count+'" class="form-control input-sm productrate" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productqty" value="" id="productqty'+count+'" class="form-control input-sm productqty" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productdiscount" value="" id="productdiscount'+count+'" class="form-control input-sm productdiscount" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productactualamount" value="" id="productactualamount'+count+'" class="form-control input-sm productactualamount" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="producttax" value="" id="producttax'+count+'" class="form-control input-sm producttax" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="producttaxamount" value="" id="productamount'+count+'" class="form-control input-sm productamount" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productnetamount" value="" id="productnetamount'+count+'" class="form-control input-sm productnetamount" data-srno="'+count+'"></td>';
+                html_code += '<td><button type="button" name="removerow" id="'+count+'" class="btn btn-danger btn-xs removerow">X</button></td>';
+                html_code += '</tr>';
+                $('#invoicetable').append(html_code);
+
+                
+            });
+
+            
+
+            $(document).on('click', '.removerow', function(){
+                var rowid = $(this).attr('id');
+                var totalproductamount = $('#productnetamount'+rowid).val();
+                var fimalamount = $('#invoicetotalamount').val();
+                var resultamount = parseFloat(fimalamount) - parseFloat(totalproductamount);
+                $('#invoicetotalamount').val(resultamount);
+                $('#rowid'+rowid).remove();
+                count--;
+                $('#totalproduct').val(count);
+            });
+
+            $(document).on('change', '.productname', function(){
+                var pid = $(this).children(':selected').attr('id');
+                var subcatid = $(this).data('subcatid');
+                $('.temppro'+subcatid).val($(this).children(':selected').html());
+                $.ajax({
+                    url: 'serchforproductdata/' + pid,
+                    method: 'POST',
+                    success: function(data){
+                        $('#producthsn'+subcatid).val(data[0].producthsn);
+                        $('#productrate'+subcatid).val(data[0].productrate);
+                        $('#producttax'+subcatid).val(data[0].producttax);
+                    }
+                })
+            });
+
+            function calfinaltotal(count){
+                var invoicetotalamount = 0;
+                for(j=1; j<=count; j++){
+                    var productrate = 0;
+                    var productqty = 0;
+                    var productdiscount = 0;
+                    var productactualamount = 0;
+                    var producttax = 0;
+                    var productamount = 0;
+                    var productnetamount = 0;
+                    productrate = $('#productrate'+j).val();
+                    productqty = $('#productqty'+j).val();
+                    productdiscount = $('#productdiscount'+j).val();
+                    if(productrate > 0 && productqty > 0){
+                        var discountdiv100 = parseFloat(productdiscount)/100;
+                        var actualamountbeforediscount = parseFloat(productrate) * parseFloat(productqty);
+                        var discountdecimal = parseFloat(actualamountbeforediscount) * parseFloat(discountdiv100);
+                        productactualamount = parseFloat(actualamountbeforediscount) - parseFloat(discountdecimal);
+                        $('#productactualamount'+j).val(productactualamount.toFixed(2));
+                        producttax = $('#producttax'+j).val();
+                        if(producttax >= 0){
+                            productamount = parseFloat(productactualamount) * parseFloat(producttax)/100;
+                            $('#productamount'+j).val(productamount.toFixed(2));
+                        }
+                        productnetamount = parseFloat(productactualamount) + parseFloat(productamount);
+                        invoicetotalamount = parseFloat(invoicetotalamount) + parseFloat(productnetamount);
+                        $('#productnetamount'+j).val(productnetamount.toFixed(2));
+                    }
+                }
+                $('#invoicetotalamount').val(invoicetotalamount.toFixed(2));
+            }
+
+            $(document).on('blur', '.productdiscount', function(){
+                console.log(count)
+                calfinaltotal(count);
+            });
+
+            $(document).on('blur', '.producttax', function(){
+                console.log(count)
+                calfinaltotal(count);
+            });
+
+            $('#createinvoice').click(function(){
+                if($('#asd').val() == 0){
+                    alert('Please Enter Customer Information')
+                    $('#asd').focus();
+                    return false;
+                }
+                for(var no=1; no<=count; no++){
+                    if($('#productname'+no).val() == 0){
+                        alert('Please Enter Product Name')
+                        $('#productname'+no).focus();
+                        return false;
+                    }
+                    if(($('#productrate'+no).val()).length == 0){
+                        alert('Please Enter Product Rate')
+                        $('#productrate'+no).focus();
+                        return false;
+                    }
+                    if(($('#productqty'+no).val()).length == 0 || $('#productqty'+no).val() == 0){
+                        alert('Please Enter Valid Product Quntity')
+                        $('#productqty'+no).focus();
+                        return false;
+                    }
+                    if(($('#productdiscount'+no).val()).length == 0){
+                        alert('Please Enter Product Discount')
+                        $('#productdiscount'+no).focus();
+                        return false;
+                    }
+                }
+                $('#invoiceform').submit();
+            });
+        });
+
+            $("#mytable").on('click', '.edit', function(){
+                var invoicedetailid = $(this).data('invoicedetailid');
+                var customerid = $(this).data('customerid');
+                $('#myModalEdit').modal('show');
+                $('.hdinvoicedetailid').val(invoicedetailid);
+                $('.hdcustomerid').val(customerid);
+            });
+
+            $("#mytable").on('click', '.delete', function(){
+                var invoicedetailid = $(this).data('invoicedetailid');
+                var customerid = $(this).data('customerid');
+                $('#myModalDelete').modal('show');
+                $('.hdinvoicedetailid').val(invoicedetailid);
+                $('.hdcustomerid').val(customerid);
+            });
+        });
+    </script>
+
+  </body>
+</html>

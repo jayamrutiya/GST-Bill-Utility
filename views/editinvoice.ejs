@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Custom fonts for this template-->
+<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="/stylesheets/sb-admin-2.min.css" rel="stylesheet">
+
+<!-- <link href="/stylesheets/style.css" rel="stylesheet"> -->
+
+<!--DataTables CSS-->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title><%= title %></title>
+</head>
+<body class="bg-light">
+
+    <!--navbar-->
+    <%- include('./includes/invoicenavbar.ejs') %>
+    <!--end of navbar-->
+    
+    <div class="container-fluid">
+    <form action="/invoiceedit" method="POST" id="invoiceform">
+        <%if(invoiceinfo.length > 0){%>
+        <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+            <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+              General Details <!--Padding is optional-->
+            </span>
+        </div>
+          <br>
+
+        <div class="row">
+            <div class="col">
+                <label>Invoice Number</label>
+                <input type="number" name="invoiceno" class="form-control" value="<%=invoiceinfo[0].invoiceno%>">
+            </div>
+            <div class="col">
+                <label>Invoice Date</label>
+                <input type="text" name="invoicedate" class="form-control" id="invoicedate" value="<%=invoiceinfo[0].invoicedate%>">
+            </div>
+        </div>
+
+        <br>
+        <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+            <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+              Company Information <!--Padding is optional-->
+            </span>
+        </div>
+        <br>
+
+        <%if(companyinfo.length > 0){%>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>Name</label>
+                    <input type="text" name="companyname" class="form-control" readonly value="<%= companyinfo[0].companyname %>">
+                </div>
+                <div class="col">
+                    <label>GSTIN</label>
+                    <input type="text" name="companygstinno" class="form-control" readonly value="<%= companyinfo[0].companygstinno %>">
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>Address</label>
+                    <textarea name="companyaddress" value="<%= companyinfo[0].companyaddress %>" class="form-control" readonly><%= companyinfo[0].companyaddress %></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>Mobile No</label>
+                    <input type="number" name="companymobileno" class="form-control" value="<%= companyinfo[0].companymobileno %>" readonly>
+                </div>
+                <div class="col">
+                    <label>Email ID</label>
+                    <input type="email" name="companyemailid" class="form-control" value="<%= companyinfo[0].companyemailid %>" readonly>
+                </div>
+            </div>
+        <%}%>
+
+        <br>
+        <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+            <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+              Customer Information <!--Padding is optional-->
+            </span>
+        </div>
+        <br>
+
+        
+            <div class="row pb-2">
+                <div class="col-6">
+                    <input type="hidden" value="<%= invoiceinfo[0].customerid %>" class="custid">
+                    <label>Name</label>
+                    <%if(customerinfo.length > 0){%>
+                        
+                        <select id="asd" class="form-control asd" name="customerid">
+                            <option value="0">--Select--</option>
+                            <%for(var i=0; i<customerinfo.length; i++){%>
+                                <option id="<%= customerinfo[i].customerid %>" value="<%= customerinfo[i].customerid %>"><%= customerinfo[i].customername %></option>
+                            <%}%>
+                        </select>
+                    <%}%>
+                    <input type="hidden" name="customername" class="tempcust" value="">
+                </div>
+                <div class="col-6">
+                    <label>Contact Person Name</label>
+                    <input type="text" name="contactpersonname" value="<%=invoiceinfo[0].contactpersonname%>" id="contactpersonname" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>Address</label>
+                    <textarea class="form-control" id="customeraddress" value="<%=invoiceinfo[0].customeraddress%>" name="customeraddress" readonly><%=invoiceinfo[0].customeraddress%></textarea>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>Mobile No</label>
+                    <input type="number" name="customerphonenumber" value="<%=invoiceinfo[0].customerphonenumber%>" id="customerphonenumber" class="form-control" readonly>
+                </div>
+                <div class="col">
+                    <label>Email ID</label>
+                    <input type="email" name="customeremailid" id="customeremailid" value="<%=invoiceinfo[0].customeremailid%>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>State</label>
+                    <input type="text" name="customerstate" id="customerstate" value="<%=invoiceinfo[0].customerstate%>" class="form-control" readonly>
+                </div>
+                <div class="col">
+                    <label>State Code</label>
+                    <input type="number" name="customerstatecode" id="customerstatecode" value="<%=invoiceinfo[0].customerstatecode%>" class="form-control" readonly>
+                </div>
+                <div class="col">
+                    <label>Pincode</label>
+                    <input type="number" name="customerpincode" id="customerpincode" value="<%=invoiceinfo[0].customerpincode%>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                    <label>GSTIN</label>
+                    <input type="text" name="customergstinno" id="customergstinno" value="<%=invoiceinfo[0].customergstinno%>" class="form-control" readonly>
+                </div>
+            </div> 
+            
+            <br>
+        <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+            <span style="font-size: 21px; background-color: #F3F5F6; padding: 0 10px;">
+              Product Information <!--Padding is optional-->
+            </span>
+        </div>
+        <br>
+
+        <table id="invoicetable" class="table table-bordered">
+            <tr>
+                <th width="2%">Sr No.</th>
+                <th>Product Name</th>
+                <th width="10%">HSN Code</th>
+                <th width="10%">Rate</th>
+                <th width="10%">Qty</th>
+                <th width="10%">Discount(%)</th>
+                <th width="10%">Actual Amount</th>
+                <th colspan="2" width="15%">Tax & Amount</th>
+                <th rowspan="2" width="10%">Net Amount</th>
+                <th rowspan="2" width="3%"><button type="button" name="addrow" id="addrow" class="btn btn-success btn-xs">+</button></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Tax(%)</th>
+                <th>Amount(Rs.)</th>
+            </tr>
+            <% m = 0; %>
+            <%invoiceinfo.forEach(function(row){%>
+                <% m = m + 1; %>
+            <tr id="<%='rowid'+ m%>" class="srno">
+                
+                <td><span id="srno"><%=m%></span></td>
+                    <input type="hidden" value="<%= row.productid %>" id="<%= 'proid'+ m %>" class="<%= 'proid'+ m %>">
+                        <td>
+                            <%if(productinfo.length > 0){%>
+                            <select class="form-control input-sm productname" data-subcatid="<%= m %>" id="<%= 'productname'+ m %>" name="productid">
+                                <option value="0">--Select--</option>
+                                <%productinfo.forEach(function(col){%>
+                                <option id="<%= col.productid %>" value="<%= col.productid %>"><%= col.productsize %><%= col.productuom %> <%= col.productname %></option>
+                                <%})%>
+                            </select>
+                            
+                            <%}%>
+                            <input type="hidden" value="<%=row.invoiceiteamid%>" name="invoiceiteamid">
+                            <input type="hidden" value="" class="<%= 'temppro'+ m %>" name="productname">
+                        </td>
+                
+                <td><input type="number" name="producthsn" value="<%=row.producthsn%>" id="<%= 'producthsn'+ m %>" class="form-control input-sm producthsn" data-srno="<%= m %>"></td>
+                <td><input type="text" name="productrate" value="<%=row.productrate%>" id="<%= 'productrate'+ m %>" class="form-control input-sm productrate" data-srno="<%= m %>"></td>
+                <td><input type="text" name="productqty" value="<%=row.productqty%>" id="<%= 'productqty'+ m %>" class="form-control input-sm productqty" data-srno="<%= m %>"></td>
+                <td><input type="text" name="productdiscount" value="<%=row.productdiscount%>" id="<%= 'productdiscount'+ m %>" class="form-control input-sm productdiscount" data-srno="<%= m %>"></td>
+                <td><input type="text" name="productactualamount" value="<%=row.productactualamount%>" id="<%= 'productactualamount'+ m %>" class="form-control input-sm productactualamount" data-srno="<%= m %>"></td>
+                <td><input type="text" name="producttax" value="<%=row.producttax%>" id="<%= 'producttax'+ m %>" class="form-control input-sm producttax" data-srno="<%= m %>"></td>
+                <td><input type="text" name="producttaxamount" value="<%=row.producttaxamount%>" id="<%= 'producttaxamount'+ m %>" class="form-control input-sm productamount" data-srno="<%= m %>"></td>
+                <td><input type="text" name="productnetamount" value="<%=row.productnetamount%>" id="<%= 'productnetamount'+ m %>" class="form-control input-sm productnetamount" data-srno="<%= m %>"></td>
+                <%if(m > 1){%>
+                <td><button type="button" name="removerow" id="<%= m %>" class="btn btn-danger btn-xs removerow">X</button>
+                        
+                <%}%>
+                <td></td>
+                
+            </tr>
+            <%})%>
+        </table>
+        
+        <table class="table table-bordered">
+            <tr>
+                <td align="right" colspan="7"><b>Total Amount</b></td>
+                <td align="center" colspan="3"><b><input type="text" class="form-control" readonly id="invoicetotalamount" name="invoicetotalamount" value="<%=invoiceinfo[0].invoicetotalamount%>">
+                    <input type="hidden" name="invoicetotalid" value="<%= invoiceinfo[0].invoicetotalid %>"></span></b></td>
+            </tr>
+            <tr>
+                <td align="center" colspan="10"><input type="submit" name="createinvoice" id="createinvoice" class="btn btn-info" value="Update"><input type="hidden" name="totalproduct" id="totalproduct" value="<%= m %>">
+                    <input type="hidden" name="invoicedetailid" value="<%= invoiceinfo[0].invoicedetailid %>"></td>
+            </tr>
+        </table>
+        
+        <%}%>
+    </form>
+    </div>
+
+    <%- include('./includes/footer.ejs') %>
+
+      <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="javascripts/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="vendor/chart.js/Chart.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="javascripts/demo/chart-area-demo.js"></script>
+  <script src="javascripts/demo/chart-pie-demo.js"></script>
+
+    <!--jquery-->
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function(){
+            // var rowid = $(".srno").attr('id');
+            //     console.log(rowid)
+            $('.asd').val($('.custid').val());
+            $('.tempcust').val($('#asd').children(':selected').html());
+           // $('.productname').val($('.proid').val());
+             var co = $('#totalproduct').val();
+             for(let a=1; a<=co; a++){
+             var subcatid = $('#productname'+a).data('subcatid');
+          //   console.log(subcatid)
+        //     var srno = $('#srno').text();
+        //     console.log(srno)
+             $('#productname'+subcatid).val($('.proid'+subcatid).val());
+             
+             $('.temppro'+subcatid).val($('#productname'+subcatid).children(':selected').html());
+             //console.log($('#temppro').val());
+        //     console.log($('#productname'+subcatid).val())
+        //     console.log($('#proid'+subcatid).val())
+         }
+            // var dd = new Date().getDate();
+            // //console.log(dd)
+            // var mm = new Date().getMonth() + 1;
+            // //console.log(mm)
+            // if (dd < 10){ 
+            //     dd = '0' + dd; 
+            // } 
+            // if (mm < 10) { 
+            //     mm = '0' + mm; 
+            // } 
+            // var yyyy = new Date().getFullYear();
+            // //console.log(yyyy)
+            // var today = yyyy + '-' + mm + '-' + dd;
+            // //console.log(today)
+            // $('#invoicedate').val(today);
+            // $('#cname').on('input', function(){
+            //     var opt = $('option[value="'+$(this).val()+'"]');
+            //     alert(opt.length ? opt.attr('id') : 'No Option');
+            // });
+            $('#asd').change(function(){
+                var id = $(this).children(":selected").attr("id");
+                $('.tempcust').val($('#asd').children(':selected').html());
+                //console.log(id);
+                $.ajax({
+                    url: 'serchfordata/' + id,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: (data) => {
+                        //console.log(data)
+                        $('#contactpersonname').val(data[0].contactpersonname);
+                        $('#customeraddress').val(data[0].customeraddress);
+                        $('#customerphonenumber').val(data[0].customerphonenumber);
+                        $('#customeremailid').val(data[0].customeremailid);
+                        $('#customerstate').val(data[0].customerstate);
+                        $('#customerstatecode').val(data[0].customerstatecode);
+                        $('#customerpincode').val(data[0].customerpincode);
+                        $('#customergstinno').val(data[0].customergstinno);
+                    }
+                });
+            });
+            // $("input[name='cname']").on('input', function(e){
+            //     var selectcustomername = $(this).val();
+            //     console.log(selectcustomername)
+
+                
+            //});
+
+            var invoicetotalamount = $('#invoicetotalamount').val();
+            var count = $('#totalproduct').val();
+            $(document).on('click', '#addrow', function(){
+                count++;
+                $('#totalproduct').val(count);
+                var html_code = '';
+                html_code += '<tr id="rowid'+count+'">';
+                html_code += '<td><span id="srno">'+count+'</span></td>';
+
+                html_code += '<td><%if(productinfo.length > 0){%><select class="form-control input-sm productname" data-subcatid="'+count+'" id="productname'+count+'" name="productid"><option value="0">--Select--</option><%productinfo.forEach(function(col){%><option id="<%= col.productid %>" value="<%= col.productid %>"><%= col.productsize %><%= col.productuom %> <%= col.productname %></option><%})%></select><%}%><input type="hidden" value="" id="invoiceiteamid'+count+'" name="invoiceiteamid"><input type="hidden" value="" class="temppro'+count+'" name="productname"></td>';
+            
+                html_code += '<td><input type="number" name="producthsn" value="" id="producthsn'+count+'" class="form-control input-sm producthsn" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productrate" value="" id="productrate'+count+'" class="form-control input-sm productrate" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productqty" value="" id="productqty'+count+'" class="form-control input-sm productqty" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productdiscount" value="" id="productdiscount'+count+'" class="form-control input-sm productdiscount" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productactualamount" value="" id="productactualamount'+count+'" class="form-control input-sm productactualamount" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="producttax" value="" id="producttax'+count+'" class="form-control input-sm producttax" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="producttaxamount" value="" id="productamount'+count+'" class="form-control input-sm productamount" data-srno="'+count+'"></td>';
+                html_code += '<td><input type="text" name="productnetamount" value="" id="productnetamount'+count+'" class="form-control input-sm productnetamount" data-srno="'+count+'"></td>';
+                html_code += '<td><button type="button" name="removerow" id="'+count+'" class="btn btn-danger btn-xs removerow">X</button></td>';
+                html_code += '</tr>';
+
+                $.ajax({
+                    url: '/getinvoiceiteamid',
+                    method: 'POST',
+                    success: (data) => {
+                        console.log(data);
+                        $('#invoiceiteamid'+count).val(data);
+                    }
+                })
+
+                $('#invoicetable').append(html_code);
+
+                
+            });
+
+            
+
+            $(document).on('click', '.removerow', function(){
+                var rowid = $(this).attr('id');
+                //console.log(rowid)
+                var totalproductamount = $('#productnetamount'+rowid).val();
+                var fimalamount = $('#invoicetotalamount').val();
+                var resultamount = parseFloat(fimalamount) - parseFloat(totalproductamount);
+                $('#invoicetotalamount').val(resultamount);
+                $('#rowid'+rowid).remove();
+                count--;
+                $('#totalproduct').val(count);
+            });
+
+            $(document).on('change', '.productname', function(){
+                var pid = $(this).children(':selected').attr('id');
+                var subcatid = $(this).data('subcatid');
+                //$('#productname'+subcatid).val($('#proid'+subcatid).val());
+                //console.log($(this).children(':selected').html());
+                $('.temppro'+subcatid).val($(this).children(':selected').html());
+                $.ajax({
+                    url: 'serchforproductdata/' + pid,
+                    method: 'POST',
+                    success: function(data){
+                        $('#producthsn'+subcatid).val(data[0].producthsn);
+                        $('#productrate'+subcatid).val(data[0].productrate);
+                        $('#producttax'+subcatid).val(data[0].producttax);
+                    }
+                })
+            });
+
+            function calfinaltotal(count){
+                var invoicetotalamount = 0;
+                for(j=1; j<=count; j++){
+                    var productrate = 0;
+                    var productqty = 0;
+                    var productdiscount = 0;
+                    var productactualamount = 0;
+                    var producttax = 0;
+                    var productamount = 0;
+                    var productnetamount = 0;
+                    productrate = $('#productrate'+j).val();
+                    productqty = $('#productqty'+j).val();
+                    productdiscount = $('#productdiscount'+j).val();
+                    if(productrate > 0 && productqty > 0){
+                        var discountdiv100 = parseFloat(productdiscount)/100;
+                        var actualamountbeforediscount = parseFloat(productrate) * parseFloat(productqty);
+                        var discountdecimal = parseFloat(actualamountbeforediscount) * parseFloat(discountdiv100);
+                        productactualamount = parseFloat(actualamountbeforediscount) - parseFloat(discountdecimal);
+                        $('#productactualamount'+j).val(productactualamount.toFixed(2));
+                        producttax = $('#producttax'+j).val();
+                        if(producttax >= 0){
+                            productamount = parseFloat(productactualamount) * parseFloat(producttax)/100;
+                            $('#productamount'+j).val(productamount.toFixed(2));
+                        }
+                        productnetamount = parseFloat(productactualamount) + parseFloat(productamount);
+                        invoicetotalamount = parseFloat(invoicetotalamount) + parseFloat(productnetamount);
+                        $('#productnetamount'+j).val(productnetamount.toFixed(2));
+                    }
+                }
+                $('#invoicetotalamount').val(invoicetotalamount.toFixed(2));
+            }
+
+            $(document).on('blur', '.productdiscount', function(){
+                console.log(count)
+                calfinaltotal(count);
+            });
+
+            $(document).on('blur', '.producttax', function(){
+                console.log(count)
+                calfinaltotal(count);
+            });
+
+            $('#createinvoice').click(function(){
+                if($('#asd').val() == 0){
+                    alert('Please Enter Customer Information')
+                    $('#asd').focus();
+                    return false;
+                }
+                for(var no=1; no<=count; no++){
+                    if($('#productname'+no).val() == 0){
+                        alert('Please Enter Product Name')
+                        $('#productname'+no).focus();
+                        return false;
+                    }
+                    if(($('#productrate'+no).val()).length == 0){
+                        alert('Please Enter Product Rate')
+                        $('#productrate'+no).focus();
+                        return false;
+                    }
+                    if(($('#productqty'+no).val()).length == 0 || $('#productqty'+no).val() == 0){
+                        alert('Please Enter Valid Product Quntity')
+                        $('#productqty'+no).focus();
+                        return false;
+                    }
+                    if(($('#productdiscount'+no).val()).length == 0){
+                        alert('Please Enter Product Discount')
+                        $('#productdiscount'+no).focus();
+                        return false;
+                    }
+                }
+                $('#invoiceform').submit();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./includes/toplinks.ejs') %>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+  </head>
+  <body id="page-top">
+    <!--page wrapper-->
+    <div id="wrapper">
+      <!--Sidebar-->
+      <%- include('./includes/sidebar.ejs') %>
+      <!--End of Sidebar-->
+      <!--Content Wrapper-->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!--main content-->
+        <div id="content">
+          <!--navbar-->
+          <%- include('./includes/navbar.ejs') %>
+          <!--end of navbar-->
+
+          <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Product Information</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+          </div>
+          <div class="row pb-3">
+            <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">ADD</button>
+          </div>
+          <div class="row">
+          <div class="table-responsive">
+            <table id="mytable" class="table table-striped table-bordered" style="width:100%">
+              <thead>
+                <tr>
+                <th>Product Name</th>
+                <th>Size</th>
+                <th>HSN Code</th>
+                <th>UOM</th>
+                <th>Tax.</th>
+                <th>Rate</th>
+                <th></th>
+              </tr>
+            </thead>
+              <%if(productinfo.length > 0){%>
+                <%productinfo.forEach(function(row){%>
+                <tr>
+                  <td><%= row.productname %></td>
+                  <td><%= row.productsize %></td>
+                  <td><%= row.producthsn %></td>
+                  <td><%= row.productuom %></td>
+                  <td><%= row.producttax %></td>
+                  <td><%= row.productrate %></td>
+                  <td>
+                    <a href="javascript:void(0);" class="btn btn-sm btn-info edit" 
+                    data-productid="<%= row.productid %>" 
+                    data-productname="<%= row.productname %>" 
+                    data-productsize="<%= row.productsize %>" 
+                    data-producthsn="<%= row.producthsn %>" 
+                    data-productuom="<%= row.productuom %>" 
+                    data-producttax="<%= row.producttax %>" 
+                    data-productrate="<%= row.productrate %>">Edit</a>
+                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-productid="<%= row.productid %>">Delete</a>
+                  </td>
+                </tr>
+              <%})%>
+              <%}%>
+            </table>
+        </div>
+        </div>
+        
+        </div>
+        <!-- /.container-fluid -->
+
+        </div>
+        <!--end of main content-->
+
+        <!-- Modal Add Customer-->
+      <form action="/productadd" method="post">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+              <div class="row pb-2">
+                <div class="col">
+                    <label>Product Name:</label>
+                    <input class="form-control" type="text" name="productname" placeholder="Product Name">
+                </div>
+                <div class="col">
+                    <label>Size:</label>
+                    <input class="form-control" type="text" name="productsize" placeholder="Size">
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col">
+                <label>HSN Code:</label>
+                <input type="number" name="producthsn" class="form-control" placeholder="HSN Code">
+                </div>
+                <div class="col">
+                    <label>UOM:</label>
+                    <input type="text" class="form-control" name="productuom" placeholder="UOM">
+                </div>
+            </div>
+              <div class="row pb-2">
+                <div class="col">
+                    <label>Tax:</label>
+                    <input type="text" class="form-control" name="producttax" placeholder="Tax">
+                </div>
+                <div class="col">
+                    <label>Rate:</label>
+                    <input type="number" class="form-control" name="productrate" placeholder="Rate">
+                </div>
+            </div>
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+        <%if(duplicateproductname != ''){%>
+            <script>
+              window.alert("<%= duplicateproductname %>");
+            </script>
+        <%}%>
+     </form>
+     <!--End of Modal Add Customer-->
+
+     <!-- Modal Update Product-->
+   <form action="/productedit" method="post">
+    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
+            <div class="row pb-2">
+              <div class="col">
+                  <label>Product Name:</label>
+                  <input class="form-control productname" type="text" name="productname">
+              </div>
+              <div class="col">
+                  <label>Size:</label>
+                  <input class="form-control productsize" type="text" name="productsize">
+              </div>
+          </div>
+          <div class="row pb-2">
+              <div class="col">
+              <label>HSN Code:</label>
+              <input type="number" name="producthsn" class="form-control producthsn">
+              </div>
+              <div class="col">
+                  <label>UOM:</label>
+                  <input type="text" class="form-control productuom" name="productuom">
+              </div>
+          </div>
+            <div class="row pb-2">
+              <div class="col">
+                  <label>Tax:</label>
+                  <input type="text" class="form-control producttax" name="producttax">
+              </div>
+              <div class="col">
+                  <label>Rate:</label>
+                  <input type="number" class="form-control productrate" name="productrate">
+              </div>
+          </div>
+           </div>
+         <div class="modal-footer">
+           <input type="hidden" name="productid" class="productid">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="submit" class="btn btn-primary">Update</button>
+         </div>
+       </div>
+     </div>
+    </div>
+</form>
+
+<!-- Modal Delete Product-->
+<form id="add-row-form" action="/productdelete" method="post">
+  <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="myModalLabel">Delete Product</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+              <strong>Are you sure to delete this data?</strong>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="productid" class="form-control productid" required>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Delete</button>
+            </div>
+             </div>
+     </div>
+  </div>
+</form>
+
+          <!--Footer-->
+        <%- include('./includes/footer.ejs') %>
+        <!--End of Footer-->
+      </div>
+      <!--End of Content Wrapper-->
+    </div>
+    <!--end of page wrapper-->
+    <!-- <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p> -->
+    <%- include('./includes/bottomlinks.ejs') %>
+    
+    <script>
+      $(document).ready(function(){
+          //showing data to add modal
+          $('#mytable').DataTable();
+            //showing data to edit modal      
+      $('#mytable').on('click','.edit',function(){
+        var productid = $(this).data('productid');
+        var productname = $(this).data('productname');
+        var productsize = $(this).data('productsize');
+        var producthsn = $(this).data('producthsn');
+        var productuom = $(this).data('productuom');
+        var producttax = $(this).data('producttax');
+        var productrate = $(this).data('productrate');
+        $('#EditModal').modal('show');
+        $('.productname').val(productname);
+        $('.productsize').val(productsize);
+        $('.producthsn').val(producthsn);
+        $('.productuom').val(productuom);
+        $('.producttax').val(producttax);
+        $('.productrate').val(productrate);
+        $('.productid').val(productid);
+      })
+            //showing delete record modal
+            $('#mytable').on('click','.delete',function(){
+        var productid = $(this).data('productid');
+        $('#DeleteModal').modal('show');
+        $('.productid').val(productid);
+      })
+ 
+    });
+    </script>
+</body>
+</html>
