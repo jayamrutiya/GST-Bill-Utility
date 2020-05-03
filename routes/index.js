@@ -8,10 +8,10 @@ var blobStream  = require('blob-stream');
 
 //connecte to database
 var connection = mysql.createConnection({
-  host : 'localhost',
-  user : 'root',
-  password : '',
-  database : 'GST'
+  host : 'us-cdbr-east-06.cleardb.net',
+  user : 'b452bcf0030cca',
+  password : 'e9c32485',
+  database : 'heroku_13f439f45487835'
 });
 connection.connect(function(err){
   if(!err){
